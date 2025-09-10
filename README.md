@@ -68,7 +68,7 @@ const db = mysql.createConnection({
 ```
 ### Run the Server 
 ```
-node server1.js
+node server.js
 ```
 ### Server will start at:
 
