@@ -78,17 +78,17 @@ node server.js
 
 ### Login Page
 
-![Login Page](screenshot/login.png)
+![Login Page](login.png)
 
 ### Student Dashboard 
 
-![Student Dashboard](screenshot/student_dashboard.png)
+![Student Dashboard](student_dashboard.png)
 
 ### Driver Dashboard
 
-![Driver Dashboard](screenshot/driver_dashboard.png)
+![Driver Dashboard](driver_dashboard.png)
 
 ### Admin Dashboard
 
-![Admin Dashboard](screenshot/admin_dashboard.png)
+![Admin Dashboard](admin_dashboard.png)
 
