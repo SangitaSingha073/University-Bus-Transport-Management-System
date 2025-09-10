@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Transport Management System</title>
+    <style>
+        /* CSS styles remain the same for visual consistency */
+        body {
+            font-family: sans-serif;
+            background-size: cover;
+            background-image: url('University-bus-tansport.png'); /* Correctly references the image */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 90vh;
+            padding: 1rem;
+        }
+
+        .main-container {
+            width: 90%;
+            max-width: 40rem; /* Increased max width for more forms */
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 0.8rem;
+            margin-bottom: 0.2rem;
+        }
+        .message-box {
+            position: fixed;
+            top: 1.25rem;
+            right: 1.25rem;
+            z-index: 1000;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+
+        .message-box.show {
+            opacity: 1;
+        }
+
+        .message-box.bg-green-500 {
+            background-color: #22c55e;
+        }
+
+        .message-box.bg-red-500 {
+            background-color: #ef4444;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .space-y-6 > * + * {
+            margin-top: 0.2rem;
+
+        }
+
+        .space-y-4 > * + * {
+            margin-top: 1rem;
+        }
+
+        .text-3xl {
+            font-size: 1.875rem;
+            line-height: 2.25rem;
+        }
+
+        .text-2xl {
+            font-size: 1.5rem;
+            line-height: 2rem;
+        }
+
+        .text-xl {
+            font-size: 1.25rem;
+            line-height: 2rem;
+        }
+
+        .text-sm {
+            font-size: 0.8rem;
+            line-height: 1.5rem;
+        }
+
+        .font-bold {
+            font-weight: 700;
+        }
+
+        .font-semibold {
+            font-weight: 600;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-gray-800 {
+            color: #1f2937;
+        }
+
+        .text-gray-700 {
+            color: #374151;
+        }
+
+        .text-gray-600 {
+            color: #4b5563;
+        }
+
+        .text-gray-500 {
+            color: #6b7280;
+        }
+
+        .text-indigo-800 {
+            color: #3730a3;
+        }
+
+        .text-indigo-700 {
+            color: #4338ca;
+        }
+
+        .text-red-600 {
+            color: #dc2626;
+        }
+
+        label {
+            display: block;
+        }
+
+        input, select {
+            margin-top: 0.25rem;
+            display: block;
+            width: 100%;
+            padding: 0.5rem 0.2rem;
+            background-color: #ffffff;
+            border: 1px solid #b5c7e2;
+            border-radius: 0.375rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 1px #6366f1;
+        }
+
+        button {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            border: 1px solid transparent;
+            border-radius: 0.375rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+            outline: none;
+        }
+
+        button:focus {
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5);
+            outline: none;
+        }
+
+        .bg-indigo-600 {
+            background-color: #4f46e5;
+        }
+
+        .bg-indigo-600:hover {
+            background-color: #4338ca;
+        }
+
+        .bg-red-600 {
+            background-color: #dc2626;
+        }
+
+        .bg-red-600:hover {
+            background-color: #b91c1c;
+        }
+
+        .bg-blue-600 {
+            background-color: #2563eb;
+        }
+
+        .bg-blue-600:hover {
+            background-color: #1d4ed8;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .bg-indigo-100 {
+            background-color: #e0e7ff;
+        }
+
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+
+        .p-6 {
+            padding: 1.5rem;
+        }
+
+        .space-y-4 > * + * {
+            margin-top: 1rem;
+        }
+
+        .grid {
+            display: grid;
+        }
+
+        .grid-cols-1 {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+
+        @media (min-width: 768px) {
+            .md\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        .gap-6 {
+            gap: 1.5rem;
+        }
+
+        .bg-white {
+            background-color: #ffffff;
+        }
+
+        .shadow-md {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .p-8 {
+            padding: 2rem;
+        }
+
+        .mt-4 {
+            margin-top: 1rem;
+        }
+        
+        #map {
+            width: 100%;
+            height: 20rem; /* Adjusted map height for better visibility */
+            border-radius: 0.5rem;
+            border: 1px solid #d1d5db;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <div class="main-container">
+
+        <div id="message-box" class="message-box"></div>
+
+        <div id="login-section" class="space-y-6">
+            <h1 class="text-3xl font-bold text-center text-gray-800">University Bus Transport Management System</h1>
+            <p class="text-center text-gray-600">Please log in to continue.</p>
+
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label for="email" class="text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="email" name="email" required class="mt-1">
+                </div>
+                <div>
+                    <label for="password" class="text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="password" name="password" required class="mt-1">
+                </div>
+                <div>
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700">
+                        Log In
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id="student-dashboard" class="hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-gray-800">Student Dashboard</h1>
+                <button id="logout-btn-student" class="bg-red-600 hover:bg-red-700">
+                    Logout
+                </button>
+            </div>
+            <div id="bus-info-card" class="bg-indigo-100 rounded-lg p-6 space-y-4">
+                <h2 class="text-2xl font-semibold text-indigo-800">Your Bus Information</h2>
+                <div id="bus-details" class="text-indigo-700">
+                    <p>Loading bus information...</p>
+                </div>
+                <!-- New section for displaying bus location -->
+                <div id="bus-location-section" class="mt-4">
+                    <h3 class="text-xl font-semibold text-indigo-800">Live Bus Location</h3>
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW DRIVER DASHBOARD SECTION -->
+        <div id="driver-dashboard" class="hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-gray-800">Driver Dashboard</h1>
+                <button id="logout-btn-driver" class="bg-red-600 hover:bg-red-700">
+                    Logout
+                </button>
+            </div>
+            <div class="bg-indigo-100 rounded-lg p-6 space-y-4">
+                <h2 class="text-2xl font-semibold text-indigo-800">Your Assigned Bus & Route</h2>
+                <div id="driver-bus-details" class="text-indigo-700">
+                    <p>Loading bus and route information...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="admin-dashboard" class="hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-gray-800">Admin Dashboard - Management</h1>
+                <button id="logout-btn-admin" class="bg-red-600 hover:bg-red-700">
+                    Logout
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold text-gray-700">Manage Students</h3>
+                    <form id="manage-students-form" data-endpoint="/api/admin/students" class="mt-4 space-y-4">
+                        <label class="text-sm font-medium text-gray-700">Action</label>
+                        <select id="student-action" name="action" class="mt-1">
+                            <option value="add">Add Student</option>
+                            <option value="update">Update Student</option>
+                            <option value="delete">Delete Student</option>
+                        </select>
+                        <input type="number" name="id" placeholder="Student ID (for update/delete)" class="mt-1">
+                        <input type="text" name="name" placeholder="Student Name" required class="mt-1">
+                        <input type="email" name="email" placeholder="Student Email (for add/update)" required class="mt-1">
+                        <input type="password" name="password" placeholder="Password (for add/update)" class="mt-1">
+                        <input type="text" name="contact_info" placeholder="Contact Info" class="mt-1">
+                        <input type="number" name="bus_id" placeholder="Bus ID (for add/update)" class="mt-1">
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700">Submit</button>
+                    </form>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold text-gray-700">Manage Drivers</h3>
+                    <form id="manage-drivers-form" data-endpoint="/api/admin/drivers" class="mt-4 space-y-4">
+                        <label class="text-sm font-medium text-gray-700">Action</label>
+                        <select id="driver-action" name="action" class="mt-1">
+                            <option value="add">Add Driver</option>
+                            <option value="update">Update Driver</option>
+                            <option value="delete">Delete Driver</option>
+                        </select>
+                        <input type="number" name="id" placeholder="Driver Staff ID (for update/delete)" class="mt-1">
+                        <input type="text" name="name" placeholder="Driver Name" required class="mt-1">
+                        <input type="email" name="email" placeholder="Driver Email (for add/update)" required class="mt-1">
+                        <input type="password" name="password" placeholder="Password (for add/update)" class="mt-1">
+                        <input type="text" name="contact_info" placeholder="Contact Info" class="mt-1">
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700">Submit</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold text-gray-700">Manage Buses</h3>
+                    <form id="manage-buses-form" data-endpoint="/api/admin/buses" class="mt-4 space-y-4">
+                        <label class="text-sm font-medium text-gray-700">Action</label>
+                        <select id="bus-action" name="action" class="mt-1">
+                            <option value="add">Add Bus</option>
+                            <option value="update">Update Bus</option>
+                            <option value="delete">Delete Bus</option>
+                        </select>
+                        <input type="number" name="id" placeholder="Bus ID (for update/delete)" class="mt-1">
+                        <input type="text" name="bus_number" placeholder="Bus Number (e.g., BUS-101)" required class="mt-1">
+                        <input type="number" name="capacity" placeholder="Capacity" class="mt-1">
+                        <input type="number" name="driver_id" placeholder="Driver Staff ID" class="mt-1">
+                        <input type="number" name="route_id" placeholder="Route ID" class="mt-1">
+                        <input type="text" name="estimated_time" placeholder="Estimated Time (e.g., 8:30 AM)" class="mt-1">
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700">Submit</button>
+                    </form>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold text-gray-700">Manage Routes</h3>
+                    <form id="manage-routes-form" data-endpoint="/api/admin/routes" class="mt-4 space-y-4">
+                        <label class="text-sm font-medium text-gray-700">Action</label>
+                        <select id="route-action" name="action" class="mt-1">
+                            <option value="add">Add Route</option>
+                            <option value="update">Update Route</option>
+                            <option value="delete">Delete Route</option>
+                        </select>
+                        <input type="number" name="id" placeholder="Route ID (for update/delete)" class="mt-1">
+                        <input type="text" name="route_name" placeholder="Route Name" required class="mt-1">
+                        <textarea name="route_details" placeholder="Route Details (stops, etc.)" class="mt-1" rows="3"></textarea>
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?AIzaSyDzrlPQp63gNWq4O-rHXUNJjqNXONalVTM" async defer></script>
+    <script>
+        // DOM element variables
+        const loginSection = document.getElementById('login-section');
+        const studentDashboard = document.getElementById('student-dashboard');
+        const driverDashboard = document.getElementById('driver-dashboard');
+        const adminDashboard = document.getElementById('admin-dashboard');
+        const loginForm = document.getElementById('login-form');
+        const busDetailsDiv = document.getElementById('bus-details');
+        const driverBusDetailsDiv = document.getElementById('driver-bus-details');
+        const messageBox = document.getElementById('message-box');
+        const mapElement = document.getElementById('map');
+        let studentMap;
+        let studentMarker;
+        let lastLocationIndex = -1;
+
+        // Event listener references
+        const manageStudentsForm = document.getElementById('manage-students-form');
+        const manageDriversForm = document.getElementById('manage-drivers-form');
+        const manageBusesForm = document.getElementById('manage-buses-form');
+        const manageRoutesForm = document.getElementById('manage-routes-form');
+
+        // Simulates a user session
+        let userRole = null;
+        let userId = null;
+
+        // Function to show a temporary message
+        function showMessage(message, type = 'success') {
+            messageBox.textContent = message;
+            messageBox.className = 'message-box show';
+            if (type === 'success') {
+                messageBox.classList.add('bg-green-500');
+            } else if (type === 'error') {
+                messageBox.classList.add('bg-red-500');
+            }
+            setTimeout(() => {
+                messageBox.classList.remove('show');
+                messageBox.classList.remove('bg-green-500', 'bg-red-500');
+            }, 3000);
+        }
+
+        // Initialize and display the map for student
+        function initStudentMap(latitude, longitude) {
+            const location = { lat: latitude, lng: longitude };
+            if (!studentMap) {
+                studentMap = new google.maps.Map(mapElement, {
+                    zoom: 13,
+                    center: location,
+                });
+                studentMarker = new google.maps.Marker({
+                    map: studentMap,
+                    position: location,
+                    title: 'Bus Location'
+                });
+            } else {
+                studentMap.setCenter(location);
+                studentMarker.setPosition(location);
+            }
+        }
+
+        // Function to handle login
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    if (result.role) {
+                        userRole = result.role;
+                        userId = result.id; // Store the user ID
+                        showMessage('Login successful!', 'success');
+                        
+                        // Show the appropriate dashboard
+                        loginSection.classList.add('hidden');
+                        if (userRole === 'student') {
+                            studentDashboard.classList.remove('hidden');
+                            fetchBusInfo();
+                        } else if (userRole === 'admin') {
+                            adminDashboard.classList.remove('hidden');
+                        } else if (userRole === 'driver') {
+                            driverDashboard.classList.remove('hidden');
+                            fetchDriverBusInfo();
+                        }
+                    } else {
+                        showMessage('Login failed. No role found.', 'error');
+                    }
+                } else {
+                    showMessage(result.message || 'Login failed. Please check your credentials.', 'error');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showMessage('An unexpected network error occurred.', 'error');
+            }
+        }
+
+        // Function to fetch and display student bus information and location
+        async function fetchBusInfo() {
+            try {
+                const response = await fetch('/api/student/businfo');
+                const data = await response.json();
+                if (response.ok) {
+                    busDetailsDiv.innerHTML = `
+                        <p><span class="font-semibold">Bus Number:</span> ${data.busDetails.busNumber}</p>
+                        <p><span class="font-semibold">Bus Route:</span> ${data.route.routeName}</p>
+                        <p><span class="font-semibold">Driver:</span> ${data.driver.name} (Phone: ${data.driver.phone})</p>
+                        
+                    `;
+                    // Update the map with the new location
+                    initStudentMap(data.location.latitude, data.location.longitude);
+                } else {
+                    busDetailsDiv.innerHTML = `<p class="text-red-600">${data.message}</p>`;
+                }
+            } catch (error) {
+                busDetailsDiv.innerHTML = `<p class="text-red-600">Failed to load bus information.</p>`;
+                console.error('Fetch bus info error:', error);
+            }
+        }
+        
+        // NEW FUNCTION: Fetch and display driver bus information
+        async function fetchDriverBusInfo() {
+            try {
+                const response = await fetch(`/api/driver/businfo?userId=${userId}`);
+                const data = await response.json();
+                if (response.ok) {
+                    driverBusDetailsDiv.innerHTML = `
+                        <p><span class="font-semibold">Bus Number:</span> ${data.busDetails.busNumber}</p>
+                        <p><span class="font-semibold">Assigned Route:</span> ${data.route.routeName}</p>
+                    `;
+                } else {
+                    driverBusDetailsDiv.innerHTML = `<p class="text-red-600">${data.message}</p>`;
+                }
+            } catch (error) {
+                driverBusDetailsDiv.innerHTML = `<p class="text-red-600">Failed to load bus information for driver.</p>`;
+                console.error('Fetch driver bus info error:', error);
+            }
+        }
+
+        // Function to handle ALL admin form submissions
+        async function handleAdminUpdate(e) {
+            e.preventDefault();
+            const form = e.target;
+            const endpoint = form.dataset.endpoint;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Clean up empty fields and convert 'id' to number if it exists and is not 'add'
+            for (let key in data) {
+                if (data[key] === '' || data[key] === null) {
+                    delete data[key];
+                }
+            }
+
+            if (data.action !== 'add' && data.id) {
+                data.id = parseInt(data.id);
+            }
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showMessage(result.message, 'success');
+                    form.reset();
+                } else {
+                    showMessage(result.message, 'error');
+                }
+            } catch (error) {
+                showMessage('An unexpected error occurred.', 'error');
+                console.error('Admin update error:', error);
+            }
+        }
+
+        // Function to handle logout
+        function handleLogout() {
+            userRole = null;
+            userId = null;
+            loginSection.classList.remove('hidden');
+            studentDashboard.classList.add('hidden');
+            driverDashboard.classList.add('hidden');
+            adminDashboard.classList.add('hidden');
+            showMessage('Logged out successfully.');
+            // Reset form visibility on logout
+            loginForm.reset();
+        }
+
+        // Event listeners
+        loginForm.addEventListener('submit', handleLogin);
+        document.getElementById('logout-btn-student').addEventListener('click', handleLogout);
+        document.getElementById('logout-btn-driver').addEventListener('click', handleLogout);
+        document.getElementById('logout-btn-admin').addEventListener('click', handleLogout);
+
+        // Admin Management Listeners (uses the generic handleAdminUpdate function)
+        manageStudentsForm.addEventListener('submit', handleAdminUpdate);
+        manageDriversForm.addEventListener('submit', handleAdminUpdate);
+        manageBusesForm.addEventListener('submit', handleAdminUpdate);
+        manageRoutesForm.addEventListener('submit', handleAdminUpdate);
+    </script>
+</body>
+</html>
